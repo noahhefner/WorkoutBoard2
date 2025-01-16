@@ -1,0 +1,18 @@
+{
+    "name": "workout-board",
+    "version": "0.0.1",
+    "description": "workout guide app",
+    "type": "module",
+    "dependencies": {
+        "express": "^4.21.2",
+        "socket.io": "^4.8.1",
+        "uuid": "^11.0.5"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    },
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    }
+}

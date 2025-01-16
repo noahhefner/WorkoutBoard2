@@ -1,0 +1,34 @@
+services:
+  node:
+    container_name: node
+    build:
+      context: .
+      dockerfile: ./node/Dockerfile
+    volumes:
+      - ./node:/usr/src/app
+    networks:
+      - caddy
+
+  golang:
+    container_name: golang
+    build:
+      context: .
+      dockerfile: ./golang/Dockerfile-air
+    volumes:
+      - ./golang:/app
+    networks:
+      - caddy
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    ports:
+      - "80:80"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    driver: bridge

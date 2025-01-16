@@ -1,0 +1,9 @@
+# Route HTTP requests to the REST API
+http://localhost {
+  reverse_proxy golang:3333
+}
+
+# Route WebSocket traffic to the Socket.IO server
+http://localhost/socket.io/* {
+  reverse_proxy node:3000
+}
