@@ -8,12 +8,14 @@ import (
 
 type BoardPageContext struct {
 	Title        string
-	NodeServerURL string
 }
 
 type HomePageContext struct {
 	Title        string
-	NodeServerURL string
+}
+
+type ControlPageContext struct {
+	Title        string
 }
 
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +31,6 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmplCtx := HomePageContext{
 		Title: "Workout Board",
-		NodeServerURL: "localhost:3000",
 	}
 	
 	err = tmpl.Execute(w, tmplCtx)
@@ -52,7 +53,28 @@ func BoardPageHandler(w http.ResponseWriter, r *http.Request) {
 	
 	tmplCtx := BoardPageContext{
 		Title: "Workout Board",
-		NodeServerURL: "localhost:3000",
+	}
+
+	err = tmpl.Execute(w, tmplCtx)
+	if err != nil {
+		panic(err.Error())
+	}
+
+}
+
+func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
+
+	tmpl, err := template.ParseFiles(
+		"templates/_base.tmpl.html",
+		"templates/layouts/main.tmpl.html",
+		"templates/pages/control.tmpl.html",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+	
+	tmplCtx := ControlPageContext{
+		Title: "Control",
 	}
 
 	err = tmpl.Execute(w, tmplCtx)
@@ -88,6 +110,7 @@ func main() {
 
 	http.HandleFunc("/home", HomePageHandler)
 	http.HandleFunc("/board", BoardPageHandler)
+	http.HandleFunc("/control", ControlPageHandler)
 
 	http.HandleFunc("/api/rooms", APIRoomsHandler)
 

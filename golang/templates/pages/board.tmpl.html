@@ -19,10 +19,24 @@
 {{ define "header" }}
 <nav class="navbar bg-primary">
     <div class="container">
-        <a class="navbar-brand text-light" href="#"><strong>Workout
-                Board</strong></a>
-        <span id="connectionStatus"
-              class="badge rounded-pill text-bg-danger fs-6 border border-white shadow-sm">Disconnected</span>
+        <a 
+          class="navbar-brand text-light" 
+          href="#"
+        >
+          <strong>Workout Board</strong>
+        </a>
+        <span 
+          id="boardId"
+          class="badge rounded-pill text-bg-warning fs-6 shadow-sm d-none"
+        >
+          id
+        </span>
+        <span 
+          id="connectionStatus"
+          class="badge rounded-pill text-bg-danger fs-6 border border-white shadow-sm"
+        >
+          Disconnected
+        </span>
     </div>
 </nav>
 {{ end }}
@@ -40,6 +54,14 @@
 
     // notify the server that the board has connected
     socket.emit('boardJoinRoom');
+
+    const idElement = document.getElementById('boardId');
+
+    // listen for id created event
+    socket.on('boardIDCreated', (data) => {
+        idElement.textContent = `Board ID: ${data}`;
+        idElement.classList.remove('d-none');
+    });
 
     const statusElement = document.getElementById('connectionStatus');
 

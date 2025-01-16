@@ -9,6 +9,8 @@
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
     integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
     crossorigin="anonymous"></script>
+<!-- HTMX -->
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 {{ end }}
 
 
@@ -29,7 +31,10 @@
     </a>
   </div>
   <div class="d-grid mb-3">
-    <select id="roomSelect" class="form-select">
+    <select 
+      id="roomSelect" 
+      class="form-select"
+    >
       <option selected>Select Board to Control</option>
     </select>
   </div>
@@ -37,10 +42,18 @@
 <script>
     const socket = io();
 
+    const dropdown = document.getElementById('roomSelect');
+
+    dropdown.addEventListener('change', (event) => {
+      const selected = event.target.value;
+      if (selected) {
+        window.location.href = `/control?roomid=${selected}`;
+      }
+    });
+
     function updateRoomSelect(rooms) {
-        console.log(rooms);
-        const dropdown = document.getElementById('roomSelect');
-        dropdown.innerHTML = '';
+        
+      dropdown.innerHTML = '';
 
         const defaultOption = document.createElement('option');
         defaultOption.text = 'Select Room';

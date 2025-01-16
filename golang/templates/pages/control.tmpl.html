@@ -31,7 +31,14 @@
     
 </main>
 <script>
+    
     const socket = io();
-    socket.emit('controlJoinRoom');
+
+    const url = new URL(window.location.href);
+    const queryParams = new URLSearchParams(url.search);
+    const roomID = queryParams.get('roomid');
+
+    socket.emit('controlJoinRoom', roomID);
+    
 </script>
 {{ end }}

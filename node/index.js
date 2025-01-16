@@ -22,6 +22,7 @@ io.on('connection', (socket) => {
         console.log('Board joined room: ' + roomID);
         socket.join(roomID);
         activeRooms.set(socket.id, roomID);
+        socket.emit('boardIDCreated', roomID);
         io.emit('roomsUpdated', JSON.stringify(Object.fromEntries(activeRooms)));
     });
 
