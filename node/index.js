@@ -29,6 +29,7 @@ io.on('connection', (socket) => {
     socket.on('controlJoinRoom', (roomID) => {
         console.log('Socket joined room - ' + roomID);
         socket.join(roomID);
+        io.to(roomID).emit('controlConnected');
     });
 
     socket.on('disconnect', () => {
