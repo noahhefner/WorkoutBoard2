@@ -4,6 +4,8 @@ import (
 	"io"
 	"net/http"
 	"html/template"
+
+	"workoutboard/database"
 )
 
 type BoardPageContext struct {
@@ -19,6 +21,8 @@ type ControlPageContext struct {
 }
 
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
+
+	database.GetAllWorkouts()
 
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
