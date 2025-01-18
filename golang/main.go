@@ -134,6 +134,24 @@ func APIRoomsHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, resp.Body)
 }
 
+func GetWorkoutByID(w http.ResponseWriter, r *http.Request) {
+
+	// TODO: get workout data
+
+	tmpl, err := template.ParseFiles(
+		"templates/partials/workout.tmpl.html",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		panic(err.Error())
+	}
+
+}
+
 func main() {
 
 	http.HandleFunc("/home", HomePageHandler)
@@ -141,6 +159,7 @@ func main() {
 	http.HandleFunc("/control", ControlPageHandler)
 
 	http.HandleFunc("/api/rooms", APIRoomsHandler)
+	http.HandleFunc("/api/workout", GetWorkoutByID)
 
 	_ = http.ListenAndServe(":3333", nil)
 }

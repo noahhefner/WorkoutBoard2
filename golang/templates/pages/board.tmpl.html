@@ -13,6 +13,8 @@
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
   integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
   crossorigin="anonymous"></script>
+<!-- HTMX -->
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 {{ end }}
 
 
@@ -53,45 +55,53 @@
 </div>
 <script>
 
+  // establish Socket.io connection
   const socket = io();
 
   // notify the server that the board has connected
   socket.emit('boardJoinRoom');
 
-  const idElement = document.getElementById('boardId');
-
-  // listen for id created event
+  // when board gets an id, show it in the header
+  const idElement = document.getElementById('boardId'); 
   socket.on('boardIDCreated', (data) => {
     idElement.textContent = `Board ID: ${data}`;
     idElement.classList.remove('d-none');
   });
 
+  // update status indicator on connection and disconnection
   const statusElement = document.getElementById('connectionStatus');
-
-  // update status indicator on connection
   socket.on('connect', () => {
     statusElement.textContent = 'Connected';
     statusElement.classList.remove('text-bg-danger');
     statusElement.classList.add('text-bg-success');
   });
-
-  // update status indicator on disconnection
   socket.on('disconnect', () => {
     statusElement.textContent = 'Disconnected';
     statusElement.classList.remove('text-bg-success');
     statusElement.classList.add('text-bg-danger');
   });
 
-  
+  // fetch workout data when workout is selected on the control
+  socket.on('workoutSelected', (data) => {
+
+    htmx.ajax(
+      'GET', 
+      `/api/workout?id=${data}`,
+      {
+        target: '#app',
+        swap: 'innerHTML'
+      }
+    );
+
+  });
+
+  // show a toast when a control connects to this board
   const toastElList = document.querySelectorAll('.toast')
   const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl, null))
-
   const toastLiveExample = document.getElementById('liveToast');
-
   socket.on('controlConnected', () => {
     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
     toastBootstrap.show();
-    console.log('showing toast');
   });
 
 </script>

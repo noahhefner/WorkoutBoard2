@@ -78,7 +78,8 @@
     // Update room select when new rooms added
     socket.on('roomsUpdated', (data) => {
       const parsed = JSON.parse(data);
-      updateRoomSelect(Object.values(parsed));
+      console.log(parsed);
+      updateRoomSelect(Object.keys(parsed));
     });
 </script>
 {{ end }}

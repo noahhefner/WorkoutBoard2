@@ -42,9 +42,21 @@
             </div>
         </div>
         <div class="col">
-            <div class="list-group">
-                {{ range .Workouts }}
-                <button type="button" class="list-group-item list-group-item-action">{{ .Name }}</button>
+            <div class="btn-group-vertical w-100" role="group" aria-label="Basic radio toggle button group">             
+                {{ range $index, $workout := .Workouts }}
+                <input 
+                  type="radio" 
+                  class="btn-check" 
+                  name="workout" 
+                  id="workout{{ $index }}"
+                  data-workout-id="{{ $workout.ID }}"
+                  autocomplete="off">
+                <label 
+                  class="btn btn-outline-primary text-start" 
+                  for="workout{{ $index }}"
+                >
+                  {{ $workout.Name }}
+                </label>
                 {{ end }}
             </div>
         </div>
@@ -59,6 +71,15 @@
     const roomID = queryParams.get('roomid');
 
     socket.emit('controlJoinRoom', roomID);
+
+    const workouts = document.querySelectorAll('[id^="workout"]');
+    workouts.forEach((workout) => {
+        workout.addEventListener("click", function() {
+            const id = workout.dataset.workoutId;
+            socket.emit('workoutSelected', id);
+            console.log(`Selected workout ${id}`);
+        });
+    });
     
 </script>
 {{ end }}

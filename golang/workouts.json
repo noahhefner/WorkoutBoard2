@@ -41,5 +41,23 @@
                 "duration": 300
             }
         ]
+    },
+    {
+        "id": 2,
+        "name": "Lower Body Strength",
+        "movements": [
+            {
+                "name": "Bodyweight Squats",
+                "duration": 60
+            },
+            {
+                "name": "Lunges",
+                "duration": 60
+            },
+            {
+                "name": "Ladder Drill",
+                "duration": 30
+            }
+        ]
     }
 ]

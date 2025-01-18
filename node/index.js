@@ -13,35 +13,47 @@ const io = new Server(server, {
 
 // key - socket id of board
 // value - room id
+
+// key - room id
+// value - socket id of board
 const activeRooms = new Map();
 
 io.on('connection', (socket) => {
 
     socket.on('boardJoinRoom', () => { 
         const roomID = uuidv4();
-        console.log('Board joined room: ' + roomID);
         socket.join(roomID);
-        activeRooms.set(socket.id, roomID);
+        activeRooms.set(roomID, socket.id);
         socket.emit('boardIDCreated', roomID);
         io.emit('roomsUpdated', JSON.stringify(Object.fromEntries(activeRooms)));
     });
 
     socket.on('controlJoinRoom', (roomID) => {
-        console.log('Socket joined room - ' + roomID);
         socket.join(roomID);
         io.to(roomID).emit('controlConnected');
     });
 
     socket.on('disconnect', () => {
-        console.log('disconnected');
-        console.log(socket.id);
-        activeRooms.delete(socket.id);
+
+        for (let [key, value] of activeRooms) {
+            if (value === socket.id) {
+                activeRooms.delete(key);
+            }
+        }
+
         io.emit('roomsUpdated', JSON.stringify(Object.fromEntries(activeRooms)));
+    });
+
+    socket.on('workoutSelected', (workoutID) => {
+        socket.rooms.forEach((roomID) => {
+            io.to(roomID).emit('workoutSelected', workoutID);
+        });
     });
 
 });
 
 app.get('/api/rooms', (req, res) => {
+    console.log(activeRooms);
     res.json(Object.fromEntries(activeRooms));
 });
 
