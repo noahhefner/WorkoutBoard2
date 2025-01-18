@@ -1,11 +1,12 @@
 package main
 
 import (
+	"os"
 	"io"
+	"fmt"
+	"encoding/json"
 	"net/http"
 	"html/template"
-
-	"workoutboard/database"
 )
 
 type BoardPageContext struct {
@@ -18,11 +19,21 @@ type HomePageContext struct {
 
 type ControlPageContext struct {
 	Title        string
+	Workouts	[]Workout
+}
+
+type Workout struct {
+	ID int `json:"id"`
+	Name string `json:"name"`
+	Movements []Movement
+}
+
+type Movement struct {
+	Name string `json:"name"`
+	Duration int `json:"duration"`
 }
 
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
-
-	database.GetAllWorkouts()
 
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
@@ -68,6 +79,18 @@ func BoardPageHandler(w http.ResponseWriter, r *http.Request) {
 
 func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
 
+	data, err := os.ReadFile("./workouts.json")
+	if err != nil {
+		panic(fmt.Sprintf("Failed to open workouts.json file: %s", err.Error()))
+	}
+
+	var workouts []Workout
+
+	err = json.Unmarshal(data, &workouts)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal workouts: %s", err.Error()))
+	}
+
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
 		"templates/layouts/main.tmpl.html",
@@ -79,6 +102,7 @@ func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
 	
 	tmplCtx := ControlPageContext{
 		Title: "Control",
+		Workouts: workouts,
 	}
 
 	err = tmpl.Execute(w, tmplCtx)

@@ -28,7 +28,27 @@
 
 {{ define "main" }}
 <main class="container flex-grow-1 pt-3" id="app">
-    
+
+    <div class="row">
+        <div class="col">
+            <div class="d-grid mb-3">
+                <button class="btn btn-success" type="button">Start</button>
+            </div>
+            <div class="d-grid mb-3">
+                <button class="btn btn-danger" type="button">Stop</button>
+            </div>
+            <div class="d-grid mb-3">
+                <button class="btn btn-warning" type="button">Reset</button>
+            </div>
+        </div>
+        <div class="col">
+            <div class="list-group">
+                {{ range .Workouts }}
+                <button type="button" class="list-group-item list-group-item-action">{{ .Name }}</button>
+                {{ end }}
+            </div>
+        </div>
+    </div>
 </main>
 <script>
     
