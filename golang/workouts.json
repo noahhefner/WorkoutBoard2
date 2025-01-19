@@ -1,63 +1,63 @@
 [
-    {
-        "id": 1,
-        "name": "Upper Body Strength",
-        "movements": [
-            {
-                "name": "Arm Circles",
-                "duration": 60
-            },
-            {
-                "name": "Punching Bag",
-                "duration": 60
-            },
-            {
-                "name": "Pushups",
-                "duration": 30
-            },
-            {
-                "name": "Bicep Curls",
-                "duration": 30
-            },
-            {
-                "name": "Pushups",
-                "duration": 30
-            },
-            {
-                "name": "Bicep Curls",
-                "duration": 30
-            },
-            {
-                "name": "Pushups",
-                "duration": 30
-            },
-            {
-                "name": "Bicep Curls",
-                "duration": 30
-            },
+  {
+    "id": 1,
+    "name": "Upper Body Strength",
+    "movements": [
+      {
+        "name": "Arm Circles",
+        "duration": 60
+      },
+      {
+        "name": "Punching Bag",
+        "duration": 60
+      },
+      {
+        "name": "Pushups",
+        "duration": 30
+      },
+      {
+        "name": "Bicep Curls",
+        "duration": 30
+      },
+      {
+        "name": "Pushups",
+        "duration": 30
+      },
+      {
+        "name": "Bicep Curls",
+        "duration": 30
+      },
+      {
+        "name": "Pushups",
+        "duration": 30
+      },
+      {
+        "name": "Bicep Curls",
+        "duration": 30
+      },
 
-            {
-                "name": "Rower",
-                "duration": 300
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Lower Body Strength",
-        "movements": [
-            {
-                "name": "Bodyweight Squats",
-                "duration": 60
-            },
-            {
-                "name": "Lunges",
-                "duration": 60
-            },
-            {
-                "name": "Ladder Drill",
-                "duration": 30
-            }
-        ]
-    }
+      {
+        "name": "Rower",
+        "duration": 300
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Lower Body Strength",
+    "movements": [
+      {
+        "name": "Bodyweight Squats",
+        "duration": 60
+      },
+      {
+        "name": "Lunges",
+        "duration": 60
+      },
+      {
+        "name": "Ladder Drill",
+        "duration": 30
+      }
+    ]
+  }
 ]

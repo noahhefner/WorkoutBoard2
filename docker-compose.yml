@@ -2,7 +2,7 @@ services:
   node:
     build:
       context: .
-      dockerfile: ./node/Dockerfile 
+      dockerfile: ./node/Dockerfile
     container_name: node
     ports:
       - "3000:3000"

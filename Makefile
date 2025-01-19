@@ -10,6 +10,8 @@ help:
 	@echo "  make down        - Stop services and remove containers"
 	@echo "  make logs        - View logs of services"
 	@echo "  make ps          - List running services"
+	@echo "  make setup       - Install npm packages"
+	@echo "  make format      - Run Prettier"
 
 .PHONY: up
 up:
@@ -26,3 +28,11 @@ logs:
 .PHONY: ps
 ps:
 	$(DEV_CMD) ps
+
+.PHONY: setup
+setup:
+	npm install
+
+.PHONY: format
+format:
+	npx prettier . --write

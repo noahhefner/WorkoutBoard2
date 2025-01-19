@@ -1,108 +1,120 @@
 {{ define "head" }}
-<!-- Bootstrap (CSS + JS) -->
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-  crossorigin="anonymous">
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-  crossorigin="anonymous"></script>
-<!-- Socket.io -->
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
-  integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
-  crossorigin="anonymous"></script>
-<!-- HTMX -->
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <!-- Bootstrap (CSS + JS) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+  <!-- Socket.io -->
+  <script
+    src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+    integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+    crossorigin="anonymous"
+  ></script>
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 {{ end }}
-
 
 {{ define "header" }}
-<nav class="navbar bg-primary">
-  <div class="container">
-    <a class="navbar-brand text-light" href="#">
-      <strong>Workout Board</strong>
-    </a>
-    <span id="boardId"
-      class="badge rounded-pill text-bg-warning fs-6 shadow-sm d-none">
-      id
-    </span>
-    <span id="connectionStatus"
-      class="badge rounded-pill text-bg-danger fs-6 border border-white shadow-sm">
-      Disconnected
-    </span>
-  </div>
-</nav>
+  <nav class="navbar bg-primary">
+    <div class="container">
+      <a class="navbar-brand text-light" href="#">
+        <strong>Workout Board</strong>
+      </a>
+      <span
+        id="boardId"
+        class="badge rounded-pill text-bg-warning fs-6 shadow-sm d-none"
+      >
+        id
+      </span>
+      <span
+        id="connectionStatus"
+        class="badge rounded-pill text-bg-danger fs-6 border border-white shadow-sm"
+      >
+        Disconnected
+      </span>
+    </div>
+  </nav>
 {{ end }}
 
-
 {{ define "main" }}
-<main class="container flex-grow-1 pt-3" id="app">
-  <p class="text-center">
-    Load a workout from the control screen to get started
-  </p>
-</main>
+  <main
+    class="container flex-grow-1 pt-3 d-flex align-items-center justify-content-center"
+    id="app"
+  >
+    <p>Load a workout from the control screen to get started</p>
+  </main>
 
-<!-- Control Connected Toast -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast" role="alert" aria-live="assertive"
-    aria-atomic="true">
-    <div class="toast-body bg-success-subtle">
-      Control Connected
+  <!-- Control Connected Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div
+      id="liveToast"
+      class="toast"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-body bg-success-subtle">Control Connected</div>
     </div>
   </div>
-</div>
-<script>
+{{ end }}
 
-  // establish Socket.io connection
-  const socket = io();
+{{ define "footer" }}
+  <footer class="bottom-0 bg-primary">Footer Here</footer>
+{{ end }}
 
-  // notify the server that the board has connected
-  socket.emit('boardJoinRoom');
+{{ define "scripts" }}
+  <script>
+    // establish Socket.io connection
+    const socket = io();
 
-  // when board gets an id, show it in the header
-  const idElement = document.getElementById('boardId'); 
-  socket.on('boardIDCreated', (data) => {
-    idElement.textContent = `Board ID: ${data}`;
-    idElement.classList.remove('d-none');
-  });
+    // notify the server that the board has connected
+    socket.emit("boardJoinRoom");
 
-  // update status indicator on connection and disconnection
-  const statusElement = document.getElementById('connectionStatus');
-  socket.on('connect', () => {
-    statusElement.textContent = 'Connected';
-    statusElement.classList.remove('text-bg-danger');
-    statusElement.classList.add('text-bg-success');
-  });
-  socket.on('disconnect', () => {
-    statusElement.textContent = 'Disconnected';
-    statusElement.classList.remove('text-bg-success');
-    statusElement.classList.add('text-bg-danger');
-  });
+    // when board gets an id, show it in the header
+    const idElement = document.getElementById("boardId");
+    socket.on("boardIDCreated", (data) => {
+      idElement.textContent = `Board ID: ${data}`;
+      idElement.classList.remove("d-none");
+    });
 
-  // fetch workout data when workout is selected on the control
-  socket.on('workoutSelected', (data) => {
+    // update status indicator on connection and disconnection
+    const statusElement = document.getElementById("connectionStatus");
+    socket.on("connect", () => {
+      statusElement.textContent = "Connected";
+      statusElement.classList.remove("text-bg-danger");
+      statusElement.classList.add("text-bg-success");
+    });
+    socket.on("disconnect", () => {
+      statusElement.textContent = "Disconnected";
+      statusElement.classList.remove("text-bg-success");
+      statusElement.classList.add("text-bg-danger");
+    });
 
-    htmx.ajax(
-      'GET', 
-      `/api/workout?id=${data}`,
-      {
-        target: '#app',
-        swap: 'innerHTML'
-      }
+    // fetch workout data when workout is selected on the control
+    socket.on("workoutSelected", (data) => {
+      htmx.ajax("GET", `/api/workout?id=${data}`, {
+        target: "#app",
+        swap: "innerHTML",
+      });
+    });
+
+    // show a toast when a control connects to this board
+    const toastElList = document.querySelectorAll(".toast");
+    const toastList = [...toastElList].map(
+      (toastEl) => new bootstrap.Toast(toastEl, null),
     );
-
-  });
-
-  // show a toast when a control connects to this board
-  const toastElList = document.querySelectorAll('.toast')
-  const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl, null))
-  const toastLiveExample = document.getElementById('liveToast');
-  socket.on('controlConnected', () => {
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-    toastBootstrap.show();
-  });
-
-</script>
+    const toastLiveExample = document.getElementById("liveToast");
+    socket.on("controlConnected", () => {
+      const toastBootstrap =
+        bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+      toastBootstrap.show();
+    });
+  </script>
 {{ end }}

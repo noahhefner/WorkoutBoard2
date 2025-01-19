@@ -1,50 +1,48 @@
 {{ define "head" }}
-<!-- Bootstrap (CSS only) -->
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-  crossorigin="anonymous">
-<!-- Socket.io -->
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+  <!-- Bootstrap (CSS only) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <!-- Socket.io -->
+  <script
+    src="https://cdn.socket.io/4.8.1/socket.io.min.js"
     integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
-    crossorigin="anonymous"></script>
-<!-- HTMX -->
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    crossorigin="anonymous"
+  ></script>
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 {{ end }}
-
 
 {{ define "header" }}
-<nav class="navbar bg-primary">
-  <div class="container">
-    <a class="navbar-brand text-light" href="#"><strong>Workout Board</strong></a>
-  </div>
-</nav>
+  <nav class="navbar bg-primary">
+    <div class="container">
+      <a class="navbar-brand text-light" href="#"
+        ><strong>Workout Board</strong></a
+      >
+    </div>
+  </nav>
 {{ end }}
 
-
 {{ define "main" }}
-<main class="container pt-3">
-  <div class="d-grid mb-3">
-    <a class="btn btn-lg btn-primary" type="button" href="/board">
-      Board
-    </a>
-  </div>
-  <div class="d-grid mb-3">
-    <select 
-      id="roomSelect" 
-      class="form-select"
-    >
-      <option selected>Select Board to Control</option>
-    </select>
-  </div>
-</main>
-<script>
+  <main class="container pt-3">
+    <div class="d-grid mb-3">
+      <a class="btn btn-lg btn-primary" type="button" href="/board"> Board </a>
+    </div>
+    <div class="d-grid mb-3">
+      <select id="roomSelect" class="form-select">
+        <option selected>Select Board to Control</option>
+      </select>
+    </div>
+  </main>
+  <script>
     const socket = io();
 
-    const dropdown = document.getElementById('roomSelect');
+    const dropdown = document.getElementById("roomSelect");
 
-    dropdown.addEventListener('change', (event) => {
+    dropdown.addEventListener("change", (event) => {
       const selected = event.target.value;
       if (selected) {
         window.location.href = `/control?roomid=${selected}`;
@@ -52,34 +50,33 @@
     });
 
     function updateRoomSelect(rooms) {
-        
-      dropdown.innerHTML = '';
+      dropdown.innerHTML = "";
 
-        const defaultOption = document.createElement('option');
-        defaultOption.text = 'Select Room';
-        dropdown.appendChild(defaultOption);
+      const defaultOption = document.createElement("option");
+      defaultOption.text = "Select Room";
+      dropdown.appendChild(defaultOption);
 
-        rooms.forEach(room => {
-            const option = document.createElement('option');
-            option.value = room;
-            option.text = room;
-            dropdown.appendChild(option);
-        });
+      rooms.forEach((room) => {
+        const option = document.createElement("option");
+        option.value = room;
+        option.text = room;
+        dropdown.appendChild(option);
+      });
     }
 
     // Initial fetch of rooms on page load
-    fetch('/api/rooms')
-    .then(response => response.json())
-    .then(data => {
-      updateRoomSelect(Object.values(data));
-    })
-    .catch(error => console.error('Error fetching rooms:', error));
+    fetch("/api/rooms")
+      .then((response) => response.json())
+      .then((data) => {
+        updateRoomSelect(Object.keys(data));
+      })
+      .catch((error) => console.error("Error fetching rooms:", error));
 
     // Update room select when new rooms added
-    socket.on('roomsUpdated', (data) => {
+    socket.on("roomsUpdated", (data) => {
       const parsed = JSON.parse(data);
       console.log(parsed);
       updateRoomSelect(Object.keys(parsed));
     });
-</script>
+  </script>
 {{ end }}

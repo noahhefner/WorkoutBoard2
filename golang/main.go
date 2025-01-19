@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"html/template"
 )
 
@@ -33,6 +34,8 @@ type Movement struct {
 	Duration int `json:"duration"`
 }
 
+var workouts []Workout
+
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles(
@@ -59,7 +62,7 @@ func BoardPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
-		"templates/layouts/main.tmpl.html",
+		"templates/layouts/board.tmpl.html",
 		"templates/pages/board.tmpl.html",
 	)
 	if err != nil {
@@ -78,18 +81,6 @@ func BoardPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
-
-	data, err := os.ReadFile("./workouts.json")
-	if err != nil {
-		panic(fmt.Sprintf("Failed to open workouts.json file: %s", err.Error()))
-	}
-
-	var workouts []Workout
-
-	err = json.Unmarshal(data, &workouts)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to unmarshal workouts: %s", err.Error()))
-	}
 
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
@@ -136,7 +127,25 @@ func APIRoomsHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetWorkoutByID(w http.ResponseWriter, r *http.Request) {
 
-	// TODO: get workout data
+	formVal := r.FormValue("id")
+	if formVal == "" {
+		http.Error(w, "No workout ID provided.", http.StatusBadRequest)
+		return
+	}
+
+	workoutID, err := strconv.Atoi(formVal)
+    if err != nil {
+        http.Error(w, "Invalid workout ID.", http.StatusBadRequest)
+		return
+    }
+
+	var workout Workout
+	for _, w := range workouts {
+		if w.ID == workoutID {
+			workout = w
+			break
+		}
+	}
 
 	tmpl, err := template.ParseFiles(
 		"templates/partials/workout.tmpl.html",
@@ -145,7 +154,7 @@ func GetWorkoutByID(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, workout)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -153,6 +162,16 @@ func GetWorkoutByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	data, err := os.ReadFile("./workouts.json")
+	if err != nil {
+		panic(fmt.Sprintf("Failed to open workouts.json file: %s", err.Error()))
+	}
+
+	err = json.Unmarshal(data, &workouts)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal workouts: %s", err.Error()))
+	}
 
 	http.HandleFunc("/home", HomePageHandler)
 	http.HandleFunc("/board", BoardPageHandler)
