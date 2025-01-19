@@ -61,7 +61,7 @@
     // when board gets an id, show it in the header
     const idElement = document.getElementById("boardId");
     socket.on("boardIDCreated", (data) => {
-      idElement.textContent = `Board ID: ${data}`;
+      idElement.textContent = data;
       idElement.classList.remove("d-none");
     });
 

@@ -2,7 +2,18 @@
 <html lang="en">
   <head>
     <title>{{ .Title }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap" rel="stylesheet">
     {{ template "head" . }}
+    <style>
+      * {
+        font-family: "Golos Text", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
   </head>
   {{ template "body" . }}
 </html>
