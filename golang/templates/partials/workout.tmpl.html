@@ -1,3 +1,23 @@
-{{ range .Movements }}
-  <p>{{ .Name }}</p>
-{{ end }}
+<main class="container flex-grow-1" id="app">
+  <span class="bg-success">
+    <div>
+      <p class="text-center" style="font-size: 100px;">3:00</p>
+    </div>
+    <div>
+      <p class="text-center" style="font-size: 50px;">{{ (index .Movements 0).Name }}</p>
+    </div>
+  </span>
+  <span class="bg-warning">
+    <p class="text-center" style="font-size: 30px;">Up Next: {{ (index .Movements 0).Name }}</p>
+  </span>
+
+    {{range $index, $movement := .Movements}}
+      {{if ge $index 2}} <!-- Skip first 2 elements -->
+      <span>
+        <p class="text-center">{{ $movement.Name }}</p>
+      </span>
+      {{end}}
+    {{end}}
+
+
+</main>

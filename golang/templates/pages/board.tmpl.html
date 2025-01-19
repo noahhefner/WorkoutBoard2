@@ -22,25 +22,10 @@
 {{ end }}
 
 {{ define "header" }}
-  <nav class="navbar bg-primary">
-    <div class="container">
-      <a class="navbar-brand text-light" href="#">
-        <strong>Workout Board</strong>
-      </a>
-      <span
-        id="boardId"
-        class="badge rounded-pill text-bg-warning fs-6 shadow-sm d-none"
-      >
-        id
-      </span>
-      <span
-        id="connectionStatus"
-        class="badge rounded-pill text-bg-danger fs-6 border border-white shadow-sm"
-      >
-        Disconnected
-      </span>
-    </div>
-  </nav>
+  <header class="d-flex justify-content-end bg-dark">
+    <div id="boardId" class="bg-warning pt-1 pb-1 ps-2 pe-2"></div>
+    <div id="connectionStatus" class="pt-1 pb-1 ps-2 pe-2">Disconnected</div>
+  </header>
 {{ end }}
 
 {{ define "main" }}
@@ -63,10 +48,6 @@
       <div class="toast-body bg-success-subtle">Control Connected</div>
     </div>
   </div>
-{{ end }}
-
-{{ define "footer" }}
-  <footer class="bottom-0 bg-primary">Footer Here</footer>
 {{ end }}
 
 {{ define "scripts" }}
@@ -101,7 +82,7 @@
     socket.on("workoutSelected", (data) => {
       htmx.ajax("GET", `/api/workout?id=${data}`, {
         target: "#app",
-        swap: "innerHTML",
+        swap: "outerHTML",
       });
     });
 
