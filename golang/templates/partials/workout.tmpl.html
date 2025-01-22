@@ -1,27 +1,42 @@
-<main class="container flex-grow-1 pt-3" id="app">
-  <div class="row justify-content-center">
-    <div class="col-10">
-      <div class="bg-success mb-3 rounded">
-        <p class="text-center m-0" style="font-size: 150px;">3:00</p>
+<main class="main" id="app">
+  <div class="row g-0 h-100">
+    <div class="col-6 h-100">
+      <div class="bg-info" style="height: 50%;">
+        <img src="/static/gif/pushups.gif" alt="demo" style="max-height: 100%; width: auto;">
+      </div>
+      <div class="bg-success" style="height: 40%;">
+        <p class="text-center m-0 text-light" style="font-size: 150px;">3:00</p>
         <p class="text-center m-0" style="font-size: 64px;">
           {{ (index .Movements 0).Name }}
         </p>
       </div>
-        <p class="text-center text-bg-warning m-0 rounded-top p-1" style="font-size: 30px;">
-          Up Next: {{ (index .Movements 1).Name }}
+      <div class="bg-warning" style="height: 10%;">
+        <p
+          class="text-center m-0 p-1"
+          style="font-size: 30px;"
+        >
+          Up Next:
+          {{ (index .Movements 1).Name }}
         </p>
-        <ul class="list-group list-group-flush rounded-bottom">
-          {{ range $index, $movement := .Movements }}
-            {{ if ge $index 2 }}
-              <li class="list-group-item d-flex justify-content-between" style="font-size:24px;">
-                <p class="m-0">{{ $movement.Name }}</p>
-                <span class="badge text-bg-secondary align-middle">
-                  <p class="m-0">00:20</p>
-                </span>
-              </li>
-            {{ end }}
+      </div>
+      
+    </div>
+    <div class="col-6 h-100">
+      <ul class="list-group list-group-flush">
+        {{ range $index, $movement := .Movements }}
+          {{ if ge $index 2 }}
+            <li
+              class="list-group-item d-flex justify-content-between"
+              style="font-size:24px;"
+            >
+              <p class="m-0">{{ $movement.Name }}</p>
+              <span class="badge text-bg-secondary align-middle">
+                <p class="m-0">00:20</p>
+              </span>
+            </li>
           {{ end }}
-          </ul>
+        {{ end }}
+      </ul>
     </div>
   </div>
 </main>

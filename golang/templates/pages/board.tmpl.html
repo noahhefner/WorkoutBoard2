@@ -19,10 +19,22 @@
   ></script>
   <!-- HTMX -->
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <!-- Styles -->
+  <style>
+    :root {
+      --header-height: 16px;
+    }
+    .header {
+      height: var(--header-height);
+    }
+    .main {
+      height: calc(100vh - var(--header-height));
+    }
+  </style>
 {{ end }}
 
 {{ define "header" }}
-  <header class="d-flex justify-content-end bg-dark">
+  <header class="header d-flex justify-content-end bg-dark">
     <div id="boardId" class="bg-warning pt-1 pb-1 ps-2 pe-2"></div>
     <div id="connectionStatus" class="pt-1 pb-1 ps-2 pe-2">Disconnected</div>
   </header>
@@ -30,7 +42,7 @@
 
 {{ define "main" }}
   <main
-    class="container flex-grow-1 pt-3 d-flex align-items-center justify-content-center"
+    class="main container flex-grow-1 pt-3 d-flex align-items-center justify-content-center"
     id="app"
   >
     <p>Load a workout from the control screen to get started</p>

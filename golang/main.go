@@ -173,6 +173,8 @@ func main() {
 		panic(fmt.Sprintf("Failed to unmarshal workouts: %s", err.Error()))
 	}
 
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
 	http.HandleFunc("/home", HomePageHandler)
 	http.HandleFunc("/board", BoardPageHandler)
 	http.HandleFunc("/control", ControlPageHandler)
