@@ -1,37 +1,37 @@
 package main
 
 import (
-	"os"
-	"io"
-	"fmt"
 	"encoding/json"
-	"net/http"
-	"strconv"
+	"fmt"
 	"html/template"
+	"io"
+	"net/http"
+	"os"
+	"strconv"
 )
 
 type BoardPageContext struct {
-	Title        string
+	Title string
 }
 
 type HomePageContext struct {
-	Title        string
+	Title string
 }
 
 type ControlPageContext struct {
-	Title        string
-	Workouts	[]Workout
+	Title    string
+	Workouts []Workout
 }
 
 type Workout struct {
-	ID int `json:"id"`
-	Name string `json:"name"`
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
 	Movements []Movement
 }
 
 type Movement struct {
-	Name string `json:"name"`
-	Duration int `json:"duration"`
+	Name     string `json:"name"`
+	Duration int    `json:"duration"`
 }
 
 var workouts []Workout
@@ -41,7 +41,7 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(
 		"templates/_base.tmpl.html",
 		"templates/layouts/main.tmpl.html",
-		"templates/pages/home.tmpl.html", 
+		"templates/pages/home.tmpl.html",
 	)
 	if err != nil {
 		panic(err.Error())
@@ -50,7 +50,7 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 	tmplCtx := HomePageContext{
 		Title: "Workout Board",
 	}
-	
+
 	err = tmpl.Execute(w, tmplCtx)
 	if err != nil {
 		panic(err.Error())
@@ -68,7 +68,7 @@ func BoardPageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	
+
 	tmplCtx := BoardPageContext{
 		Title: "Workout Board",
 	}
@@ -90,9 +90,9 @@ func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	
+
 	tmplCtx := ControlPageContext{
-		Title: "Control",
+		Title:    "Control",
 		Workouts: workouts,
 	}
 
@@ -104,7 +104,7 @@ func ControlPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func APIRoomsHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	req, err := http.NewRequest(r.Method, "http://node:3000/api/rooms", nil)
 	if err != nil {
 		http.Error(w, "Failed to create request", http.StatusInternalServerError)
@@ -134,10 +134,10 @@ func GetWorkoutByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	workoutID, err := strconv.Atoi(formVal)
-    if err != nil {
-        http.Error(w, "Invalid workout ID.", http.StatusBadRequest)
+	if err != nil {
+		http.Error(w, "Invalid workout ID.", http.StatusBadRequest)
 		return
-    }
+	}
 
 	var workout Workout
 	for _, w := range workouts {
